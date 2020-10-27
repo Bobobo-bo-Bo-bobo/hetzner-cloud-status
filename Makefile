@@ -28,6 +28,7 @@ distclean: clean
 	rm -rf src/github.com/
 	rm -rf src/gopkg.in/
 	rm -rf src/golang.org/
+	test -d pkg && chmod -R u+w pkg/ && rm -rf pkg/
 
 uninstall:
 	/bin/rm -f $(DESTDIR)/usr/bin
