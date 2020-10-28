@@ -5,7 +5,7 @@ import (
 )
 
 const name = "hetzner-cloud-status"
-const version = "1.0.0-20201027"
+const version = "1.0.0-20201028"
 const userAgent = name + "/" + version
 
 const versionText = `%s version %s

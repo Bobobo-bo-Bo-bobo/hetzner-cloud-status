@@ -6,21 +6,34 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
-func httpRequest(url string, method string, header *map[string]string, reader io.Reader, apitoken string) (HTTPResult, error) {
+func httpRequest(_url string, method string, header *map[string]string, reader io.Reader, proxy string, apitoken string) (HTTPResult, error) {
 	var result HTTPResult
 	var transp *http.Transport
+	var proxyURL *url.URL
+	var err error
 
+	if proxy != "" {
+		proxyURL, err = url.Parse(proxy)
+		if err != nil {
+			return result, err
+		}
+	}
 	transp = &http.Transport{
 		TLSClientConfig: &tls.Config{},
+	}
+
+	if proxy != "" {
+		transp.Proxy = http.ProxyURL(proxyURL)
 	}
 
 	client := &http.Client{
 		Transport: transp,
 	}
 
-	request, err := http.NewRequest(method, url, reader)
+	request, err := http.NewRequest(method, _url, reader)
 	if err != nil {
 		return result, err
 	}

@@ -19,6 +19,7 @@ func usage() {
 
 func main() {
 	var parsedServers HetznerAllServer
+	var useProxy string
 
 	if len(os.Args) != 2 {
 		usage()
@@ -31,7 +32,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	servers, err := httpRequest(hetznerAllServers, "GET", nil, nil, token)
+	environment := getEnvironment()
+
+	// Like curl the lower case variant has precedence.
+	httpsproxy, lcfound := environment["https_proxy"]
+	httpsProxy, ucfound := environment["HTTPS_PROXY"]
+
+	if lcfound {
+		useProxy = httpsproxy
+	} else if ucfound {
+		useProxy = httpsProxy
+	}
+
+	servers, err := httpRequest(hetznerAllServers, "GET", nil, nil, useProxy, token)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
