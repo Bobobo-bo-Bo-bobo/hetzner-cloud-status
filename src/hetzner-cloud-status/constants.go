@@ -18,18 +18,24 @@ Public License Version 3. (http://www.gnu.org/copyleft/gpl.html)
 Build with go version: %s
 `
 
-const hetznerAllServers = "https://api.hetzner.cloud/v1/servers?sort=name"
+const hetznerAllServersURL = "https://api.hetzner.cloud/v1/servers?sort=name"
+const hetznerAllVolumesURL = "https://api.hetzner.cloud/v1/volumes?sort=name"
 
-var statusMap = map[string]aurora.Value{
-	"running":      aurora.Bold(aurora.Green("running")),
+var statusServerMap = map[string]aurora.Value{
+	"deleting":     aurora.Bold(aurora.Red("deleting")),
 	"initializing": aurora.Cyan("initialising"),
+	"migrating":    aurora.Blink(aurora.Green("migrating")),
+	"off":          aurora.Red("off"),
+	"rebuilding":   aurora.Blue("rebuilding"),
+	"running":      aurora.Bold(aurora.Green("running")),
 	"starting":     aurora.Faint(aurora.Green("starting")),
 	"stopping":     aurora.Faint(aurora.Yellow("stopping")),
-	"off":          aurora.Red("off"),
-	"deleting":     aurora.Bold(aurora.Red("deleting")),
-	"migrating":    aurora.Blink(aurora.Green("migrating")),
-	"rebuilding":   aurora.Blue("rebuilding"),
 	"unknown":      aurora.Bold(aurora.Blink(aurora.Magenta("unknown"))),
+}
+
+var statusVolumeMap = map[string]aurora.Value{
+	"creating":  aurora.Cyan("creating"),
+	"available": aurora.Bold(aurora.Green("available")),
 }
 
 var mapSI = []string{

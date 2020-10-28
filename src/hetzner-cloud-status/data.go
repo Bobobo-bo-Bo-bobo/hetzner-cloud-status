@@ -21,6 +21,7 @@ type HetznerAllServer struct {
 // HetznerServer - single server
 type HetznerServer struct {
 	ID              uint64            `json:"id"`
+	Created         string            `json:"created"`
 	Name            string            `json:"name"`
 	Status          string            `json:"status"`
 	ServerType      HetznerServerType `json:"server_type"`
@@ -29,6 +30,7 @@ type HetznerServer struct {
 	IncludedTraffic uint64            `json:"included_traffic"`
 	IncomingTraffic uint64            `json:"ingoing_traffic"`
 	OutgoingTraffic uint64            `json:"outgoing_traffic"`
+	Volumes         []uint64          `json:"volumes"`
 	// ...
 }
 
@@ -71,4 +73,21 @@ type HetznerImage struct {
 	Description string `json:"description"`
 	OSFlavor    string `json:"os_flavor"`
 	OSVersion   string `json:"os_version"`
+}
+
+// HetznerAllVolumes - list of all volumes
+type HetznerAllVolumes struct {
+	Volume []HetznerVolume `json:"volumes"`
+}
+
+// HetznerVolume - single volume
+type HetznerVolume struct {
+	ID          uint64                    `json:"id"`
+	Created     string                    `json:"created"`
+	Name        string                    `json:"name"`
+	Location    HetznerDatacenterLocation `json:"location"`
+	Size        uint64                    `json:"size"`
+	LinuxDevice string                    `json:"linux_device"`
+	Status      string                    `json:"status"`
+	Format      string                    `json:"format"`
 }

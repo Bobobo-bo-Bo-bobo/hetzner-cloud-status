@@ -19,6 +19,7 @@ func usage() {
 
 func main() {
 	var parsedServers HetznerAllServer
+	var parsedVolumes HetznerAllVolumes
 	var useProxy string
 
 	if len(os.Args) != 2 {
@@ -44,7 +45,8 @@ func main() {
 		useProxy = httpsProxy
 	}
 
-	servers, err := httpRequest(hetznerAllServers, "GET", nil, nil, useProxy, token)
+	// get list of instances
+	servers, err := httpRequest(hetznerAllServersURL, "GET", nil, nil, useProxy, token)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -61,5 +63,23 @@ func main() {
 		os.Exit(1)
 	}
 
-	printAllServers(parsedServers)
+	// get list of shared storage volumes
+	volumes, err := httpRequest(hetznerAllVolumesURL, "GET", nil, nil, useProxy, token)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	if volumes.StatusCode != http.StatusOK {
+		fmt.Fprintln(os.Stderr, volumes.Status)
+		os.Exit(1)
+	}
+
+	err = json.Unmarshal(volumes.Content, &parsedVolumes)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	printAllServers(parsedServers, parsedVolumes)
 }
