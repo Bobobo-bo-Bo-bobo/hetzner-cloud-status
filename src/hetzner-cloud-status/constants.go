@@ -5,8 +5,8 @@ import (
 )
 
 const name = "hetzner-cloud-status"
-const version = "1.0.0-20201028"
-const userAgent = name + "/" + version
+const version = "1.0.0"
+const userAgent = name + "/" + version + " (https://git.ypbind.de/cgit/hetzner-cloud-status/)"
 
 const versionText = `%s version %s
 Copyright (C) 2020 by Andreas Maus <maus@ypbind.de>
